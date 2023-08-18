@@ -1,38 +1,44 @@
 {
-  "name": "1-lesson",
+  "name": "todo13v3",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.1",
-    "@types/react": "^18.0.23",
-    "@types/react-dom": "^18.0.7",
-    "@types/uuid": "^9.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-redux": "^8.0.7",
+    "@emotion/react": "11.10.5",
+    "@emotion/styled": "11.10.5",
+    "@mui/icons-material": "5.10.9",
+    "@mui/material": "5.10.11",
+    "@storybook/testing-library": "^0.2.0",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "13.4.0",
+    "@testing-library/user-event": "14.4.3",
+    "@types/jest": "29.2.0",
+    "@types/node": "18.11.7",
+    "@types/react": "18.0.23",
+    "@types/react-dom": "18.0.7",
+    "@types/react-redux": "7.1.24",
+    "@types/uuid": "8.3.4",
+    "axios": "^1.4.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-redux": "8.0.4",
     "react-scripts": "5.0.1",
-    "redux": "^4.2.1",
-    "typescript": "^4.8.4",
-    "uuid": "^9.0.0",
-    "web-vitals": "^2.1.4"
+    "redux": "4.2.0",
+    "typescript": "4.8.4",
+    "uuid": "9.0.0",
+    "web-vitals": "3.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest",
-      "plugin:storybook/recommended"
+      "react-app/jest"
     ]
   },
   "browserslist": {
@@ -48,19 +54,14 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "7.2.2",
-    "@storybook/addon-interactions": "7.2.2",
-    "@storybook/addon-links": "7.2.2",
-    "@storybook/addon-onboarding": "1.0.8",
-    "@storybook/blocks": "7.2.2",
-    "@storybook/preset-create-react-app": "7.2.2",
-    "@storybook/react": "7.2.2",
-    "@storybook/react-webpack5": "7.2.2",
-    "@storybook/testing-library": "0.2.0",
-    "babel-plugin-named-exports-order": "0.0.2",
-    "eslint-plugin-storybook": "^0.6.13",
-    "prop-types": "15.8.1",
-    "storybook": "7.2.2",
-    "webpack": "5.88.2"
+    "@storybook/addon-actions": "6.5.13",
+    "@storybook/addon-essentials": "6.5.13",
+    "@storybook/addon-links": "6.5.13",
+    "@storybook/builder-webpack5": "6.5.13",
+    "@storybook/manager-webpack5": "6.5.13",
+    "@storybook/node-logger": "6.5.13",
+    "@storybook/preset-create-react-app": "4.1.2",
+    "@storybook/react": "6.5.13",
+    "webpack": "5"
   }
 }

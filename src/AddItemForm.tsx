@@ -1,42 +1,54 @@
-import React, { useState, KeyboardEvent, ChangeEvent } from "react";
+import React, { ChangeEvent, KeyboardEvent, useState } from "react";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import { AddBox } from "@mui/icons-material";
 
 type AddItemFormPropsType = {
   addItem: (title: string) => void;
 };
-export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
-  const [taskTitle, setTaskTitle] = useState("");
-  const [error, setError] = useState<string | null>(null);
 
-  const setTitleValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setTaskTitle(e.currentTarget.value);
-  };
+export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
+  console.log("AddItemForm called");
 
-  const addTaskHandler = () => {
-    if (taskTitle.trim() !== "") {
-      props.addItem(taskTitle.trim());
-      setTaskTitle("");
+  let [title, setTitle] = useState("");
+  let [error, setError] = useState<string | null>(null);
+
+  const addItem = () => {
+    if (title.trim() !== "") {
+      props.addItem(title);
+      setTitle("");
     } else {
-      setError("Title is requered");
+      setError("Title is required");
     }
   };
 
-  const onKeyPressHandler = (e: KeyboardEvent) => {
-    setError("");
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.currentTarget.value);
+  };
+
+  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (error !== null) {
+      setError(null);
+    }
     if (e.charCode === 13) {
-      addTaskHandler();
+      addItem();
     }
   };
 
   return (
     <div>
-      <input
-        value={taskTitle}
-        onChange={setTitleValue}
+      <TextField
+        variant="outlined"
+        error={!!error}
+        value={title}
+        onChange={onChangeHandler}
         onKeyPress={onKeyPressHandler}
-        className={error ? "error" : ""}
+        label="Title"
+        helperText={error}
       />
-      <button onClick={() => addTaskHandler()}>+</button>
-      {error && <div className="error-message">{error}</div>}
+      <IconButton color="primary" onClick={addItem}>
+        <AddBox />
+      </IconButton>
     </div>
   );
 });
