@@ -8,51 +8,69 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-export type TodolistsType = {
+export type TodolistType = {
   id: string;
   title: string;
   addedDate: string;
   order: number;
 };
-
-export type CreateTodolistsType = {
+export type ResponseType<D = {}> = {
   resultCode: number;
   messages: Array<string>;
-  data: {
-    item: TodolistsType;
-  };
-};
-
-export type _DeleteUpdateTodolistsType = {
-  resultCode: number;
-  messages: Array<string>;
-  data: {};
-};
-export type _UpdateTodolistsType = {
-  resultCode: number;
-  messages: Array<string>;
-  data: {};
-};
-
-type ResponseType<D = {}> = {
-  resultCode: number;
-  messages: Array<string>;
+  fieldsErrors: Array<string>;
   data: D;
 };
 
-export type TaskType = {};
+export enum TaskStatuses {
+  New = 0,
+  InProgress = 1,
+  Completed = 2,
+  Draft = 3,
+}
 
-type GetTasksResponseType = {
+export enum TaskPriorities {
+  Low = 0,
+  Middle = 1,
+  Hi = 2,
+  Urgently = 3,
+  Later = 4,
+}
+
+export type TaskType = {
+  description: string;
+  title: string;
+  status: TaskStatuses;
+  priority: TaskPriorities;
+  startDate: string;
+  deadline: string;
+  id: string;
+  todoListId: string;
+  order: number;
+  addedDate: string;
+};
+export type UpdateTaskModelType = {
+  title: string;
+  description: string;
+  status: TaskStatuses;
+  priority: TaskPriorities;
+  startDate: string;
+  deadline: string;
+};
+type GetTasksResponse = {
   error: string | null;
   totalCount: number;
+  items: TaskType[];
 };
 
 export const todolistsAPI = {
   getTodolists() {
-    return instance.get<Array<TodolistsType>>("todo-lists");
+    return instance.get<Array<TodolistType>>("todo-lists");
   },
   createTodolists(title: string) {
-    return instance.post<ResponseType<{ item: TodolistsType }>>("todo-lists", {
+    // return instance.post<ResponseType<{ item: TodolistType }>>("todo-lists", {
+    //   title: title,
+    // });
+    return instance.post<ResponseType<TaskType>>("todo-lists", {
       title: title,
     });
   },
