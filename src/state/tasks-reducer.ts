@@ -19,6 +19,10 @@ import {
   setErrorAC,
   setStatusAC,
 } from "./app-reducer";
+import {
+  handleServerAppError,
+  handleServerNetworkError,
+} from "../utils/error-utils";
 
 export type RemoveTaskActionType = {
   type: "REMOVE-TASK";
@@ -95,7 +99,7 @@ export const tasksReducer = (
       const stateCopy = { ...state };
 
       const tasks = stateCopy[action.task.todoListId];
-      console.log(action.task);
+
       const newTasks = [action.task, ...tasks];
       stateCopy[action.task.todoListId] = newTasks;
       return stateCopy;
@@ -195,21 +199,21 @@ export const createTaskTC = (title: string, todoListId: string): any => {
     dispatch: Dispatch<ActionsType | SetErrorActionType | SetStatusActionType>
   ) => {
     dispatch(setStatusAC("loading"));
-    todolistsAPI.createTask(todoListId, title).then((res) => {
-      if (res.data.resultCode == 0) {
-        const task = res.data.data.item;
-        const action = addTaskAC(task);
-        dispatch(action);
-        dispatch(setStatusAC("succeeded"));
-      } else {
-        if (res.data.messages.length) {
-          dispatch(setErrorAC(res.data.messages[0]));
+    todolistsAPI
+      .createTask(todoListId, title)
+      .then((res) => {
+        if (res.data.resultCode == 0) {
+          const task = res.data.data.item;
+          const action = addTaskAC(task);
+          dispatch(action);
+          dispatch(setStatusAC("succeeded"));
         } else {
-          dispatch(setErrorAC("some error"));
+          handleServerAppError(res.data, dispatch);
         }
-        dispatch(setStatusAC("failed"));
-      }
-    });
+      })
+      .catch((error) => {
+        handleServerNetworkError(error, dispatch);
+      });
   };
 };
 
@@ -227,9 +231,8 @@ export const updateTaskTC = (
   model: UpdateDomainTaskModelType,
   todolistId: string
 ): any => {
-  return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+  return (dispatch: ThunkDispatch, getState: () => AppRootStateType) => {
     const state = getState();
-    console.log(state);
     const task = state.tasks[todolistId].find((t) => t.id === taskId);
     if (!task) {
       console.warn("no task in state");
@@ -245,9 +248,22 @@ export const updateTaskTC = (
       ...model,
     };
 
-    todolistsAPI.updateTask(todolistId, taskId, apiModel).then((res) => {
-      const action = updateTaskAC(taskId, model, todolistId);
-      dispatch(action);
-    });
+    todolistsAPI
+      .updateTask(todolistId, taskId, apiModel)
+      .then((res) => {
+        if (res.data.resultCode === 0) {
+          const action = updateTaskAC(taskId, model, todolistId);
+          dispatch(action);
+        } else {
+          handleServerAppError(res.data, dispatch);
+        }
+      })
+      .catch((error) => {
+        handleServerNetworkError(error, dispatch);
+      });
   };
 };
+
+type ThunkDispatch = Dispatch<
+  ActionsType | SetStatusActionType | SetErrorActionType
+>;

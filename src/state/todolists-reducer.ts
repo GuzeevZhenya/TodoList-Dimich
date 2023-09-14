@@ -143,7 +143,7 @@ export const fetchTodolistsTC = (): any => {
 
     todolistsAPI.getTodolists().then((res) => {
       dispatch(setTodolistAC(res.data));
-      dispatch(setStatusAC("succeeded"));
+      dispatch(setStatusAC("succeeded")); 
     });
   };
 };
@@ -177,6 +177,6 @@ export const changeTodoliskTitleTC = (id: string, title: string): any => {
   };
 };
 
-type ThunkDispatch = Dispatch<
+export type ThunkDispatch = Dispatch<
   ActionsType | SetStatusActionType | SetErrorActionType
 >;

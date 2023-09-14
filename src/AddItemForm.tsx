@@ -34,8 +34,6 @@ export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
     }
   };
 
-  console.log(props.disabled)
-
   return (
     <div>
       <TextField

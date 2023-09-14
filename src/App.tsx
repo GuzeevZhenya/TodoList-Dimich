@@ -110,7 +110,6 @@ function App() {
   const status = useSelector<AppRootStateType, RequestStatusType>(
     (state) => state.app.status
   );
-  console.log(status);
 
   return (
     <div className="App">

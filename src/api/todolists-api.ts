@@ -45,7 +45,6 @@ export const todolistsAPI = {
     );
   },
   updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-    debugger;
     return instance.put<
       ResponseType<{ item: TaskType }>,
       AxiosResponse<ResponseType<{ item: TaskType }>>,
