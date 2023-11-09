@@ -115,6 +115,7 @@ export const Todolist = React.memo(function ({
               removeTask={props.removeTask}
               changeTaskTitle={props.changeTaskTitle}
               changeTaskStatus={props.changeTaskStatus}
+              
             />
           ))}
       </div>
