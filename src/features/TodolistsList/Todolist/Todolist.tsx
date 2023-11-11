@@ -8,7 +8,9 @@ import { Task } from "./Task/Task";
 import { TaskStatuses, TaskType } from "../../../api/todolists-api";
 import { FilterValuesType, TodolistDomainType } from "../todolists-reducer";
 import { fetchTasksTC } from "../tasks-reducer";
-import { useAppDispatch } from "../../../app/store";
+import { AppRootStateType, useAppDispatch } from "../../../app/store";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 type PropsType = {
   todolist: TodolistDomainType;
@@ -31,7 +33,9 @@ type PropsType = {
 };
 
 export const Todolist = React.memo(function ({ ...props }: PropsType) {
-  console.log("Todolist called");
+  const isLoggedIn = useSelector<AppRootStateType, boolean>(
+    (state) => state.auth.isLoggedIn
+  );
 
   const dispatch = useAppDispatch();
   useEffect(() => {

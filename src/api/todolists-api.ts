@@ -68,6 +68,12 @@ export const authAPI = {
       data
     );
   },
+
+  me() {
+    return instance.get<
+      ResponseType<{ id: number; email: string; login: string }>
+    >("/auth/me");
+  },
 };
 
 // types
@@ -79,7 +85,7 @@ export type TodolistType = {
 };
 export type ResponseType<D = {}> = {
   resultCode: number;
-  messages : Array<string>;
+  messages: Array<string>;
   fieldsErrors: Array<string>;
   data: D;
 };

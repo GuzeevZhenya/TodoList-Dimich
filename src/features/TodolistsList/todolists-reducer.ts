@@ -7,7 +7,10 @@ import {
   SetAppStatusActionType,
 } from "../../app/app-reducer";
 import { error } from "console";
-import { handleServerAppError } from "../../utils/error-utils";
+import {
+  handleServerAppError,
+  handleServerNetworkError,
+} from "../../utils/error-utils";
 
 const initialState: Array<TodolistDomainType> = [];
 
@@ -87,7 +90,6 @@ export const fetchTodolistsTC = () => {
         dispatch(setAppStatusAC("succeeded"));
       })
       .catch((error) => {
-        console.log(error);
         handleServerNetworkError(error, dispatch);
       });
   };

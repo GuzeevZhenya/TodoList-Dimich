@@ -1,5 +1,4 @@
 import { Dispatch } from "redux";
-
 import {
   SetAppErrorActionType,
   SetAppStatusActionType,
@@ -35,13 +34,12 @@ export const loginTC =
       ActionsType | SetAppStatusActionType | SetAppErrorActionType
     >
   ) => {
-    dispatch(setIsLoggedInAC(true));
     dispatch(setAppStatusAC("loading"));
     authAPI
       .login(data)
       .then((res) => {
-        console.log(data);
         if (res.data.resultCode === 0) {
+          dispatch(setIsLoggedInAC(true));
           dispatch(setAppStatusAC("succeeded"));
         } else {
           handleServerAppError(res.data, dispatch);

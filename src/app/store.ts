@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   tasks: tasksReducer,
   todolists: todolistsReducer,
   app: appReducer,
-  login: authReducer,
+  auth: authReducer,
 });
 // непосредственно создаём store
 export const store = legacy_createStore(
