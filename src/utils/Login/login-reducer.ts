@@ -6,55 +6,41 @@ import {
 } from "../../app/app-reducer";
 import { authAPI, loginParamsType } from "../../api/todolists-api";
 import { handleServerAppError, handleServerNetworkError } from "../error-utils";
+import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: InitialStateType = {
+const initialState = {
   isLoggedIn: false,
 };
+const slice = createSlice({
+  name: "auth",
+  initialState: initialState,
+  reducers: {
+    setIsLoggedInAC(state, action: any) {
+      state.isLoggedIn = action.value;
+    },
+  },
+});
 
-export const authReducer = (
-  state: InitialStateType = initialState,
-  action: ActionsType
-): InitialStateType => {
-  switch (action.type) {
-    case "LOGIN/SET-IS-LOGGED-IN":
-      return { ...state, isLoggedIn: action.value };
-    default:
-      return state;
-  }
-};
+export const authReducer = slice.reducer;
+const setIsLoggedInAC = slice.actions.setIsLoggedInAC;
 
 // actions
-export const setIsLoggedInAC = (value: boolean) =>
-  ({ type: "LOGIN/SET-IS-LOGGED-IN", value } as const);
 
-export const loginTC =
-  (data: loginParamsType) =>
-  (
-    dispatch: Dispatch<
-      ActionsType | SetAppStatusActionType | SetAppErrorActionType
-    >
-  ) => {
-    dispatch(setAppStatusAC("loading"));
-    authAPI
-      .login(data)
-      .then((res) => {
-        if (res.data.resultCode === 0) {
-          dispatch(setIsLoggedInAC(true));
-          dispatch(setAppStatusAC("succeeded"));
-        } else {
-          handleServerAppError(res.data, dispatch);
-        }
-      })
-      .catch((error) => {
-        handleServerNetworkError(error, dispatch);
-      });
-  };
-
-type ActionsType = ReturnType<typeof setIsLoggedInAC>;
-// dispatch: Dispatch<ActionsType>;
-type InitialStateType = {
-  isLoggedIn: boolean;
+export const loginTC = (data: loginParamsType) => (dispatch: Dispatch) => {
+  dispatch(setAppStatusAC("loading"));
+  authAPI
+    .login(data)
+    .then((res) => {
+      if (res.data.resultCode === 0) {
+        // dispatch(setIsLoggedInAC(true));
+        dispatch(setAppStatusAC("succeeded"));
+      } else {
+        handleServerAppError(res.data, dispatch);
+      }
+    })
+    .catch((error) => {
+      handleServerNetworkError(error, dispatch);
+    });
 };
-type ThunkDispatch = Dispatch<
-  ActionsType | SetAppStatusActionType | SetAppErrorActionType
->;
+
+type ThunkDispatch = Dispatch<SetAppStatusActionType | SetAppErrorActionType>;
