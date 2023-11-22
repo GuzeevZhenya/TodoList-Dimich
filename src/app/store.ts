@@ -45,7 +45,6 @@ export const useAppSelector: TypedUseSelectorHook<AppRootStateType> =
 // @ts-ignore
 window.store = store;
 
-
 // export type AppStateType = ReturnType<typeof store.getState>
 // export type AppDispatch=typeof store.dispatch
 // export const useAppDispatch:()=>AppDispatch=useDispatch

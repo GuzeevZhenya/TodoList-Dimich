@@ -13,17 +13,21 @@ export const handleServerAppError = <D>(
 ) => {
   console.log(data);
   if (data.messages.length) {
-    dispatch(setAppErrorAC(data.messages[0]));
+    dispatch(setAppErrorAC({ error: data.messages[0] }));
   } else {
-    dispatch(setAppErrorAC("some error"));
+    dispatch(setAppErrorAC({ error: "some error" }));
   }
-  dispatch(setAppStatusAC("failed"));
+  dispatch(setAppStatusAC({ status: "failed" }));
 };
 
 export const handleServerNetworkError = (
   error: any,
   dispatch: Dispatch<SetAppErrorActionType | SetAppStatusActionType>
 ) => {
-  dispatch(setAppErrorAC(error.message ? error.message : "some error"));
-  dispatch(setAppStatusAC("failed"));
+  dispatch(
+    setAppErrorAC(
+      error.message ? { error: error.message } : { error: "some error" }
+    )
+  );
+  dispatch(setAppStatusAC({ status: "failed" }));
 };

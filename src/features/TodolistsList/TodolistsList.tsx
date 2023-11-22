@@ -80,7 +80,10 @@ export const TodolistsList: React.FC = () => {
     value: FilterValuesType,
     todolistId: string
   ) {
-    const action = changeTodolistFilterAC(todolistId, value);
+    const action = changeTodolistFilterAC({
+      id: todolistId,
+      filter: value,
+    });
     dispatch(action);
   },
   []);
