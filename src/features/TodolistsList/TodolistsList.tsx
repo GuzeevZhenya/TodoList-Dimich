@@ -79,7 +79,7 @@ export const TodolistsList: React.FC = () => {
   const changeFilter = useCallback(function (
     value: FilterValuesType,
     todolistId: string
-  ) {
+  ) { 
     const action = changeTodolistFilterAC({
       id: todolistId,
       filter: value,
