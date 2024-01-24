@@ -7,7 +7,7 @@ import { Delete } from "@mui/icons-material";
 import { Task } from "./Task/Task";
 import { TaskStatuses, TaskType } from "../../../api/todolists-api";
 import { FilterValuesType, TodolistDomainType } from "../todolists-reducer";
-import { fetchTasksTC } from "../tasks-reducer";
+import { fetchTasks } from "../tasks-reducer";
 import { AppRootStateType, useAppDispatch } from "../../../app/store";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
@@ -39,7 +39,7 @@ export const Todolist = React.memo(function ({ ...props }: PropsType) {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    const thunk = fetchTasksTC(props.todolist.id);
+    const thunk = fetchTasks(props.todolist.id);
     dispatch(thunk);
   }, []);
 
