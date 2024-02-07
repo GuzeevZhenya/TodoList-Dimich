@@ -1,16 +1,20 @@
-import Grid from "@mui/material/Grid";
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
-import FormLabel from "@mui/material/FormLabel";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import React from "react";
 import { useFormik } from "formik";
-import { loginTC } from "./login-reducer";
-import { AppRootStateType, useAppDispatch } from "../../app/store";
 import { useSelector } from "react-redux";
-import { Navigate, redirect } from "react-router-dom";
+import { loginTC } from "./auth-reducer";
+import { AppRootStateType } from "../../app/store";
+import { Navigate } from "react-router-dom";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Grid,
+  TextField,
+} from "@mui/material";
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +30,6 @@ export const Login = () => {
           email: "Email is required",
         };
       }
-
       if (!values.password) {
         return {
           password: "Password is required",
@@ -44,17 +47,17 @@ export const Login = () => {
   });
 
   if (isLoggedIn) {
-    return <Navigate to="/" />;
+    return <Navigate to={"/"} />;
   }
 
   return (
-    <Grid container justifyContent={"center"}>
-      <Grid item justifyContent={"center"}>
+    <Grid container justifyContent="center">
+      <Grid item xs={4}>
         <form onSubmit={formik.handleSubmit}>
           <FormControl>
             <FormLabel>
               <p>
-                To log in get registered
+                To log in get registered{" "}
                 <a
                   href={"https://social-network.samuraijs.com/"}
                   target={"_blank"}
@@ -63,7 +66,7 @@ export const Login = () => {
                 </a>
               </p>
               <p>or use common test account credentials:</p>
-              <p>Email: free@samuraijs.com</p>
+              <p> Email: free@samuraijs.com</p>
               <p>Password: free</p>
             </FormLabel>
             <FormGroup>
@@ -84,11 +87,13 @@ export const Login = () => {
               ) : null}
               <FormControlLabel
                 label={"Remember me"}
-                control={<Checkbox name="rememberMe" />}
-                {...formik.getFieldProps("rememberMe")}
-                checked={formik.values.rememberMe}
-              ></FormControlLabel>
-
+                control={
+                  <Checkbox
+                    {...formik.getFieldProps("rememberMe")}
+                    checked={formik.values.rememberMe}
+                  />
+                }
+              />
               <Button type={"submit"} variant={"contained"} color={"primary"}>
                 Login
               </Button>
