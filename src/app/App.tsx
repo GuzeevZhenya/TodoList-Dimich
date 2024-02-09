@@ -36,8 +36,6 @@ function App({ demo = false }: PropsType) {
   );
   const dispatch = useDispatch<any>();
 
-  console.log(isLoggedIn,isInitialized)
-
   useEffect(() => {
     dispatch(initializeAppTC());
   }, []);

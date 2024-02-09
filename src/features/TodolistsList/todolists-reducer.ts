@@ -3,12 +3,12 @@ import { Dispatch } from "redux";
 import { RequestStatusType, setAppStatusAC } from "../../app/app-reducer";
 import { handleServerNetworkError } from "../../utils/error-utils";
 import { AppThunk } from "../../app/store";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 
-// const initialState: Array<TodolistDomainType> = [];
+const initialState: Array<TodolistDomainType> = [];
 
 export const slice = createSlice({
-  initialState: [],
+  initialState: initialState,
   name: "todolists",
   reducers: {
     removeTodolistAC: (state, action: PayloadAction<{ id: string }>) => {
@@ -18,7 +18,7 @@ export const slice = createSlice({
       state,
       action: PayloadAction<{ todolist: TodolistType }>
     ) => {
-      return state.push({
+      state.push({
         ...action.payload.todolist,
         filter: "all",
         entityStatus: "idle",
@@ -27,67 +27,82 @@ export const slice = createSlice({
     changeTodolistTitleAC: (
       state,
       action: PayloadAction<{ id: string; title: string }>
-    ) => {},
+    ) => {
+      const index = state.findIndex((tl) => tl.id === action.payload.id);
+      state[index].title = action.payload.title;
+    },
     changeTodolistFilterAC: (
       state,
       action: PayloadAction<{ id: string; filter: FilterValuesType }>
-    ) => {},
+    ) => {
+      const index = state.findIndex((tl) => tl.id === action.payload.id);
+      state[index].filter = action.payload.filter;
+    },
     changeTodolistEntityStatusAC: (
       state,
       action: PayloadAction<{ id: string; status: RequestStatusType }>
-    ) => {},
+    ) => {
+      const index = state.findIndex((tl) => tl.id === action.payload.id);
+      state[index].entityStatus = action.payload.status;
+    },
     setTodolistsAC: (
       state,
       action: PayloadAction<{ todolists: Array<TodolistType> }>
-    ) => {},
+    ) => {
+      return action.payload.todolists.map((tl) => ({
+        ...tl,
+        filter: "all",
+        entityStatus: "idle",
+      }));
+    },
   },
 });
 
 export const todolistsReducer = slice.reducer;
 export const {
   removeTodolistAC,
-  addTodolistAC,
-  changeTodolistTitleAC,
-  changeTodolistFilterAC,
-  changeTodolistEntityStatusAC,
   setTodolistsAC,
+  changeTodolistEntityStatusAC,
+  changeTodolistFilterAC,
+  changeTodolistTitleAC,
+  addTodolistAC,
 } = slice.actions;
 
-export const todolistsReducer_ = (
-  state: Array<TodolistDomainType> = initialState,
-  action: ActionsType
-): Array<TodolistDomainType> => {
-  switch (action.type) {
-    case "REMOVE-TODOLIST":
-      return state.filter((tl) => tl.id != action.id);
-    case "ADD-TODOLIST":
-      return [
-        { ...action.todolist, filter: "all", entityStatus: "idle" },
-        ...state,
-      ];
+// export const todolistsReducer_ = (
+//   state: Array<TodolistDomainType> = initialState,
+//   action: ActionsType
+// ): Array<TodolistDomainType> => {
+//   switch (action.type) {
+//     case "REMOVE-TODOLIST":
+//       return state.filter((tl) => tl.id != action.id);
+//     case "ADD-TODOLIST":
+//       return [
+//         { ...action.todolist, filter: "all", entityStatus: "idle" },
+//         ...state,
+//       ];
 
-    case "CHANGE-TODOLIST-TITLE":
-      return state.map((tl) =>
-        tl.id === action.id ? { ...tl, title: action.title } : tl
-      );
-    case "CHANGE-TODOLIST-FILTER":
-      return state.map((tl) =>
-        tl.id === action.id ? { ...tl, filter: action.filter } : tl
-      );
-    case "CHANGE-TODOLIST-ENTITY-STATUS":
-      return state.map((tl) =>
-        tl.id === action.id ? { ...tl, entityStatus: action.status } : tl
-      );
-    case "SET-TODOLISTS":
-      return action.todolists.map((tl) => ({
-        ...tl,
-        filter: "all",
-        entityStatus: "idle",
-      }));
-    default:
-      return state;
-  }
-};
+//     case "CHANGE-TODOLIST-TITLE":
+//       return state.map((tl) =>
+//         tl.id === action.id ? { ...tl, title: action.title } : tl
+//       );
+//     case "CHANGE-TODOLIST-FILTER":
+//       return state.map((tl) =>
+//         tl.id === action.id ? { ...tl, filter: action.filter } : tl
+//       );
+//     case "CHANGE-TODOLIST-ENTITY-STATUS":
+//       return state.map((tl) =>
+//         tl.id === action.id ? { ...tl, entityStatus: action.status } : tl
+//       );
+//     case "SET-TODOLISTS":
+//       return action.todolists.map((tl) => ({
+//         ...tl,
+//         filter: "all",
+//         entityStatus: "idle",
+//       }));
+//     default:
+//       return state;
+//   }
+// };
 
 // actions
 // export const removeTodolistAC = (id: string) =>
@@ -160,27 +175,17 @@ export const addTodolistTC = (title: string) => {
 export const changeTodolistTitleTC = (id: string, title: string) => {
   return (dispatch: Dispatch) => {
     todolistsAPI.updateTodolist(id, title).then((res) => {
-      dispatch(changeTodolistTitleAC({ id, title }));
+      dispatch(changeTodolistTitleAC({ id: id, title }));
     });
   };
 };
 
 export type FilterValuesType = "all" | "active" | "completed";
-
-// types
-// export type AddTodolistActionType = ReturnType<typeof addTodolistAC>;
-// export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>;
-// export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>;
-// type ActionsType =
-//   | RemoveTodolistActionType
-//   | AddTodolistActionType
-//   | ReturnType<typeof changeTodolistTitleAC>
-//   | ReturnType<typeof changeTodolistFilterAC>
-//   | SetTodolistsActionType
-//   | ReturnType<typeof changeTodolistEntityStatusAC>;
-
 export type TodolistDomainType = TodolistType & {
   filter: FilterValuesType;
   entityStatus: RequestStatusType;
 };
-// type ThunkDispatch = Dispatch<ActionsType>;
+
+export type AddTodolistActionType = ReturnType<typeof addTodolistAC>;
+export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>;
+export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>;
