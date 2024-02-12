@@ -126,7 +126,7 @@ export const updateTaskTC =
     domainModel: UpdateDomainTaskModelType,
     todolistId: string
   ) =>
-  (dispatch: Dispatch, getState: () => AppRootStateType) => {
+  (dispatch: Dispatch , getState: () => AppRootStateType) => {
     const state = getState();
     const task = state.tasks[todolistId].find((t) => t.id === taskId);
     if (!task) {
