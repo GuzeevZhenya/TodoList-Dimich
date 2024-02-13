@@ -40,8 +40,8 @@ export const Todolist = React.memo(function ({
     if (demo) {
       return;
     }
-    const thunk = fetchTasksTC(props.todolist.id);
 
+    const thunk = fetchTasksTC(props.todolist.id);
     dispatch(thunk);
   }, []);
 

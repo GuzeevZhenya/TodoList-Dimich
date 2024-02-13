@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import { useSelector } from "react-redux";
 import { loginTC } from "./auth-reducer";
 import { AppRootStateType } from "../../app/store";
@@ -15,6 +15,12 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
+
+type FormValues = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -41,8 +47,19 @@ export const Login = () => {
       password: "",
       rememberMe: false,
     },
-    onSubmit: (values) => {
-      dispatch(loginTC(values));
+    onSubmit: async (
+      values: FormValues,
+      formikHelpeps: FormikHelpers<FormValues>
+    ) => {
+      const action = await dispatch(loginTC(values));
+      if (loginTC.rejected.match(action)) {
+        if (action.payload?.fieldsErrors?.length) {
+           const error = action.payload?.fieldsErrors[0];
+
+          formikHelpeps.setFieldError(error.field, error.error);
+        } else {
+        }
+      }
     },
   });
 
