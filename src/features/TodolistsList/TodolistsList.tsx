@@ -54,7 +54,7 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    const thunk = addTaskTC(title, todolistId);
+    const thunk = addTaskTC({ title, todolistId });
     dispatch(thunk);
   }, []);
 
@@ -63,7 +63,11 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     status: TaskStatuses,
     todolistId: string
   ) {
-    const thunk = updateTaskTC(id, { status }, todolistId);
+    const thunk = updateTaskTC({
+      taskId: id,
+      domainModel: { status },
+      todolistId,
+    });
     dispatch(thunk);
   },
   []);
@@ -73,7 +77,11 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     newTitle: string,
     todolistId: string
   ) {
-    const thunk = updateTaskTC(id, { title: newTitle }, todolistId);
+    const thunk = updateTaskTC({
+      taskId: id,
+      domainModel: { title: newTitle },
+      todolistId,
+    });
     dispatch(thunk);
   },
   []);
@@ -104,6 +112,8 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     },
     [dispatch]
   );
+
+  console.log(isLoggedIn);
 
   if (!isLoggedIn) {
     return <Navigate to={"/login"} />;
